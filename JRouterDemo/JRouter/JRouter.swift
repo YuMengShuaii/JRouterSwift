@@ -167,10 +167,12 @@ fileprivate class JRouterCore {
                 }
             }
         }
-        let app = UIApplication.shared.delegate as! AppDelegate
-        anim?((app.window?.rootViewController as! UINavigationController))
-        (app.window?.rootViewController as! UINavigationController).pushViewController(vc, animated: true)
-        ROUTER_LOGGER_PROXY.debug("【路由成功,路由至\(className!)页面成功】")
+        let window = UIApplication.shared.delegate?.window
+        if window != nil {
+            anim?((window!!.rootViewController as! UINavigationController))
+            (window!!.rootViewController as! UINavigationController).pushViewController(vc, animated: true)
+            ROUTER_LOGGER_PROXY.debug("【路由成功,路由至\(className!)页面成功】")
+        }
     }
     
 }

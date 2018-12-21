@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "JRouter"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "IOS Router. Easy Fast Light !"
 
   # This description is used to generate tags and improve search results.
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   # s.description  = <<-DESC
   
 
-  s.homepage     = "https://github.com/YuMengShuaii/JRouter/"
+  s.homepage     = "https://github.com/YuMengShuaii/JRouterSwift/"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/YuMengShuaii/JRouter.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/YuMengShuaii/JRouterSwift.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
