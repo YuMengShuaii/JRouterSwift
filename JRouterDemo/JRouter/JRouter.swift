@@ -21,30 +21,38 @@ fileprivate class JRouterCore {
     private let pathDic : RouterPagerDictionaryOutput = RouterPagerDictionary()
     
     /// 构建拦截器
-    lazy var interceipt : RouterInterceptor? = getObject()
+    lazy var interceipt : RouterInterceptor? = getProcessor()
     
     /// 构建路径处理
-    lazy var pathHandle : RouterPathHandle? = getObject()
+    lazy var pathHandle : RouterPathHandle? = getProcessor()
     
     /// 构建路径注入
-    lazy var injecter : RouterPathInjecter? = getObject()
+    lazy var injecter : RouterPathInjecter? = getProcessor()
     
     /// 初始化
     init() {
         //路径注入
-        injecter?.inject(pathDic: pathDic as! RouterPagerDictionaryInput)
+        injecter?.inject(pagerDic: pathDic as! RouterPagerDictionaryInput)
     }
     
     /// 获取路径处理器
-    private func getObject<T : NSObject>() -> T?{
-        var handle : T? = nil
+    private func getProcessor<T : NSObject >() -> T?{
+        var processors : [JRouterProcessorControl] = []
         Utils.subclasses(T.self).forEach { item in
             let type = (item as! T.Type)
-            handle = type.init()
-            ROUTER_LOGGER_PROXY.debug("【处理器初始化,找到\(T.className)的实现子类】=>>> \(type.className)")
-            return
+            let processor = type.init()
+            ROUTER_LOGGER_PROXY.debug("【处理器初始化,找到\(T.routerClassName)的实现子类】=>>> \(type.routerClassName)")
+            processors.append(processor as! JRouterProcessorControl)
         }
-        return handle
+        processors.sort { x , y  -> Bool in
+            return x.getProcessorLevel() < y.getProcessorLevel()
+        }
+        if processors.count > 0{
+            ROUTER_LOGGER_PROXY.debug("【最终采用\(T.routerClassName)优先级最高的实现类】=>>> \((processors[0] as! NSObject).routerClassName)")
+            return processors[0] as? T
+        }else{
+            return nil
+        }
     }
     
     /// 获取实例
@@ -95,7 +103,7 @@ fileprivate class JRouterCore {
         let window = UIApplication.shared.delegate?.window
         if window != nil && window!!.rootViewController is UINavigationController {
             (window!!.rootViewController as! UINavigationController).viewControllers.forEach { item in
-                if  item.className.fitClassname().contains(className!) {
+                if  item.routerClassName.contains(className!) {
                     (window!!.rootViewController as! UINavigationController).popToViewController(item, animated: anim)
                 }
             }
@@ -145,7 +153,7 @@ fileprivate class JRouterCore {
         let window = UIApplication.shared.delegate?.window
         if window != nil && window!!.rootViewController is UINavigationController {
             (window!!.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
-                if  item.className.fitClassname().contains(className!) {
+                if  item.routerClassName.contains(className!) {
                     has = true
                     return
                 }
@@ -173,7 +181,7 @@ fileprivate class JRouterCore {
         let window = UIApplication.shared.delegate?.window
         if window != nil && window!!.rootViewController is UINavigationController {
             (window!!.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
-                if  item.className.fitClassname().contains(className!) {
+                if  item.routerClassName.contains(className!) {
                     (window!!.rootViewController as! UINavigationController).viewControllers.remove(at: index)
                     ROUTER_LOGGER_PROXY.debug("【移除栈内\(className!)页面成功】")
                     return

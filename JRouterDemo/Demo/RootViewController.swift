@@ -10,7 +10,7 @@ import UIKit
 
 class RootViewController: UIViewController , RouterPagerAgreement{
     
-    func getArgs<T>(key: String, defaultValue: T?) -> T {
+    func getArgs<T>(key: String, defaultValue: T) -> T {
         return "" as! T
     }
     

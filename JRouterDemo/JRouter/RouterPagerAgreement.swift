@@ -20,6 +20,7 @@ public protocol RouterPagerAgreement {
     ///
     /// - Parameter key: 索引
     /// - Returns: 参数
-    func getArgs<T>(key : String , defaultValue : T?) ->T
+    func getArgs<T>(key : String , defaultValue : T) ->T
     
+
 }

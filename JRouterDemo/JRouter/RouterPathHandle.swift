@@ -9,7 +9,7 @@
 import Foundation
 
 /// 路由路径处理器
-open class RouterPathHandle : NSObject{
+open class RouterPathHandle : NSObject , JRouterProcessorControl{
     
     required override public init() {
         
@@ -33,4 +33,10 @@ open class RouterPathHandle : NSObject{
     /// - Returns: 处理后的路径
     open func handle(path :String) ->String {return path}
     
+    /// 处理器级别控制 只使用级别最高的处理器
+    ///
+    /// - Returns: 处理器级别
+    open func getProcessorLevel() -> Int {
+        return 1
+    }
 }

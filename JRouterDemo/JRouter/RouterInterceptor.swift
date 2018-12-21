@@ -9,7 +9,7 @@
 import Foundation
 
 /// 路由拦截器
-open class RouterInterceptor : NSObject {
+open class RouterInterceptor : NSObject , JRouterProcessorControl{
     
     required override public init() {
         
@@ -36,5 +36,12 @@ open class RouterInterceptor : NSObject {
     ///   - intent: 数据载体
     /// - Returns: 是否拦截
     open func intercept(path :String , intent :RouterPagerAgreement) -> Bool {return false}
+    
+    /// 处理器级别控制 只使用级别最高的处理器
+    ///
+    /// - Returns: 处理器级别
+    open func getProcessorLevel() -> Int {
+        return 1
+    }
     
 }

@@ -14,17 +14,4 @@ public enum JRouterPathType : String  {
     
     case ROOT = "/root/main"
     
-    case ERROR = "ERROR"
-    
-    public static func typeOfPage(className : String) -> JRouterPathType{
-        
-        switch className {
-        case "RootViewController" :
-            return .ROOT
-        default :
-            return .ERROR
-        }
-        
-    }
-    
 }

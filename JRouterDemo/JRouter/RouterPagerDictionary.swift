@@ -29,8 +29,8 @@ class RouterPagerDictionary : RouterPagerDictionaryInput ,RouterPagerDictionaryO
     ///   - key: 页面索引
     func registerRouterPager(controller: UIViewController.Type, key: String) {
         if controller is RouterPagerAgreement.Type{
-            ROUTER_LOGGER_PROXY.info("注入页面 =======>>>> \(controller.className)  Path====>>>>> \(key)")
-            dic.setValue(controller.className.fitClassname(), forKey: key)
+            ROUTER_LOGGER_PROXY.info("注入页面 =======>>>> \(controller.routerClassName)  Path====>>>>> \(key)")
+            dic.setValue(controller.routerClassName, forKey: key)
         }
     }
     

@@ -33,16 +33,6 @@ extension AnyOpt where Self :Any {
     }
 }
 
-// MARK: - String扩展
-extension String{
-    /// 完善类全名
-    ///
-    /// - Returns: 全名
-    public func fitClassname() ->String {
-        return "\(Bundle.main.namespance).\(self)"
-    }
-}
-
 // MARK: - 扩展Bundle
 extension Bundle{
     var namespance : String{
@@ -52,12 +42,12 @@ extension Bundle{
 
 // MARK: - 扩展NSObject
 extension NSObject {
-    public var className: String {
-        return type(of: self).className
+    public var routerClassName: String {
+        return "\(Bundle.init(for: type(of: self)).namespance).\(String(describing: type(of: self)))"
     }
     
-    public static var className: String {
-        return String(describing: self)
+    public static var routerClassName: String {
+        return "\(Bundle.init(for: self).namespance).\(String(describing: self))"
     }
 }
 

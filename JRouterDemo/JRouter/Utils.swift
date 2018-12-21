@@ -9,12 +9,12 @@
 import Foundation
 
 /// 工具类
-public class Utils{
+class Utils{
     /// 获取指定类所有子类
     ///
     /// - Parameter baseclass: 指定类
     /// - Returns: 子类集合
-    public static func subclasses(_ baseclass: AnyClass!) -> [AnyClass] {
+    static func subclasses(_ baseclass: AnyClass!) -> [AnyClass] {
         var result = [AnyClass]()
         
         guard let baseclass = baseclass else {
