@@ -67,9 +67,17 @@ fileprivate class JRouterCore {
     ///
     /// - Parameter anim: 是否需要动画
     fileprivate func popToRoot(anim :Bool = true){
-        let app = UIApplication.shared.delegate as! AppDelegate
-        (app.window?.rootViewController as! UINavigationController).popToRootViewController(animated: anim)
-        ROUTER_LOGGER_PROXY.debug("【已退出至根页面】")
+        let window = UIApplication.shared.delegate?.window
+        if window != nil && window!!.rootViewController is UINavigationController {
+            (window!!.rootViewController as! UINavigationController).popToRootViewController(animated: anim)
+            ROUTER_LOGGER_PROXY.debug("【已退出至根页面】")
+        }else{
+            if window == nil{
+                ROUTER_LOGGER_PROXY.error("【退出至根页面失败，获取window失败】")
+            }else if !(window!!.rootViewController is UINavigationController){
+                ROUTER_LOGGER_PROXY.error("【退出至根页面失败，rootViewController需继承UINavigationController或者其子类】")
+            }
+        }
     }
     
     /// 退出到指定已存在Controller
@@ -84,13 +92,21 @@ fileprivate class JRouterCore {
             ROUTER_LOGGER_PROXY.error("退出页面失败,页面注册列表中，不包含该页面 path ->>> \(data)")
             return
         }
-        let app = UIApplication.shared.delegate as! AppDelegate
-        (app.window?.rootViewController as! UINavigationController).viewControllers.forEach { item in
-            if  item.className.fitClassname().contains(className!) {
-                (app.window?.rootViewController as! UINavigationController).popToViewController(item, animated: anim)
+        let window = UIApplication.shared.delegate?.window
+        if window != nil && window!!.rootViewController is UINavigationController {
+            (window!!.rootViewController as! UINavigationController).viewControllers.forEach { item in
+                if  item.className.fitClassname().contains(className!) {
+                    (window!!.rootViewController as! UINavigationController).popToViewController(item, animated: anim)
+                }
+            }
+            ROUTER_LOGGER_PROXY.debug("【退出页面成功，成功退至\(className!)页面】")
+        }else{
+            if window == nil{
+                ROUTER_LOGGER_PROXY.error("【退出页面失败，获取window失败】")
+            }else if !(window!!.rootViewController is UINavigationController){
+                ROUTER_LOGGER_PROXY.error("【退出页面失败，rootViewController需继承UINavigationController或者其子类】")
             }
         }
-        ROUTER_LOGGER_PROXY.debug("【退出页面成功，成功退至\(className!)页面】")
     }
     
     
@@ -98,10 +114,19 @@ fileprivate class JRouterCore {
     ///
     /// - Returns: 当前显示视图
     fileprivate func getCurrentPage() ->UIViewController?{
-        let app = UIApplication.shared.delegate as! AppDelegate
-        return  (app.window?.rootViewController as! UINavigationController).topViewController?.with({ _ in
-            ROUTER_LOGGER_PROXY.debug("【获取当前顶部视图成功】")
-        })
+        let window = UIApplication.shared.delegate?.window
+        if window != nil && window!!.rootViewController is UINavigationController {
+            return  (window!!.rootViewController as! UINavigationController).topViewController?.with({ _ in
+                ROUTER_LOGGER_PROXY.debug("【获取当前顶部视图成功】")
+            })
+        }else{
+            if window == nil{
+                ROUTER_LOGGER_PROXY.error("【获取顶部视图失败，获取window失败】")
+            }else if !(window!!.rootViewController is UINavigationController){
+                ROUTER_LOGGER_PROXY.error("【获取顶部视图失败，rootViewController需继承UINavigationController或者其子类】")
+            }
+            return nil
+        }
     }
     
     
@@ -117,11 +142,19 @@ fileprivate class JRouterCore {
             ROUTER_LOGGER_PROXY.error("页面注册列表中，不包含该页面 path ->>> \(name)")
             return false
         }
-        let app = UIApplication.shared.delegate as! AppDelegate
-        (app.window?.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
-            if  item.className.fitClassname().contains(className!) {
-                has = true
-                return
+        let window = UIApplication.shared.delegate?.window
+        if window != nil && window!!.rootViewController is UINavigationController {
+            (window!!.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
+                if  item.className.fitClassname().contains(className!) {
+                    has = true
+                    return
+                }
+            }
+        }else{
+            if window == nil{
+                ROUTER_LOGGER_PROXY.error("【判断栈内页面失败，获取window失败】")
+            }else if !(window!!.rootViewController is UINavigationController){
+                ROUTER_LOGGER_PROXY.error("【判断站内页面失败，rootViewController需继承UINavigationController或者其子类】")
             }
         }
         return has
@@ -137,12 +170,20 @@ fileprivate class JRouterCore {
             ROUTER_LOGGER_PROXY.error("移除页面失败，页面注册列表中，不包含该页面 path ->>> \(data)")
             return
         }
-        let app = UIApplication.shared.delegate as! AppDelegate
-        (app.window?.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
-            if  item.className.fitClassname().contains(className!) {
-                (app.window?.rootViewController as! UINavigationController).viewControllers.remove(at: index)
-                ROUTER_LOGGER_PROXY.debug("【移除栈内\(className!)页面成功】")
-                return
+        let window = UIApplication.shared.delegate?.window
+        if window != nil && window!!.rootViewController is UINavigationController {
+            (window!!.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
+                if  item.className.fitClassname().contains(className!) {
+                    (window!!.rootViewController as! UINavigationController).viewControllers.remove(at: index)
+                    ROUTER_LOGGER_PROXY.debug("【移除栈内\(className!)页面成功】")
+                    return
+                }
+            }
+        }else{
+            if window == nil{
+                ROUTER_LOGGER_PROXY.error("【页面移除失败，获取window失败】")
+            }else if !(window!!.rootViewController is UINavigationController){
+                ROUTER_LOGGER_PROXY.error("【页面移除失败，rootViewController需继承UINavigationController或者其子类】")
             }
         }
     }
@@ -168,10 +209,16 @@ fileprivate class JRouterCore {
             }
         }
         let window = UIApplication.shared.delegate?.window
-        if window != nil {
+        if window != nil && window!!.rootViewController is UINavigationController {
             anim?((window!!.rootViewController as! UINavigationController))
             (window!!.rootViewController as! UINavigationController).pushViewController(vc, animated: true)
             ROUTER_LOGGER_PROXY.debug("【路由成功,路由至\(className!)页面成功】")
+        }else{
+            if window == nil{
+                ROUTER_LOGGER_PROXY.error("【路由失败，获取window失败】")
+            }else if !(window!!.rootViewController is UINavigationController){
+                ROUTER_LOGGER_PROXY.error("【路由失败，rootViewController需继承UINavigationController或者其子类】")
+            }
         }
     }
     
