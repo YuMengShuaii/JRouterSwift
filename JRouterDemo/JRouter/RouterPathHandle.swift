@@ -22,7 +22,7 @@ open class RouterPathHandle : NSObject , JRouterProcessorControl{
     func realHandle(path :String) ->String {
         let newPath = handle(path: path)
         if (path != newPath){
-            ROUTER_LOGGER_PROXY.debug("【路由路径已被处理】处理前->> \(path) 处理后->>> \(newPath)")
+            ROUTER_LOGGER.debug("【路由路径已被处理】处理前->> \(path) 处理后->>> \(newPath)")
         }
         return newPath
     }

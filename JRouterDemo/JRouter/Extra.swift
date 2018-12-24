@@ -56,5 +56,4 @@ extension Array{
     public func forEachEnumerated(_ body: @escaping (_ offset: Int, _ element: Element) -> Void) {
         enumerated().forEach(body)
     }
-
 }

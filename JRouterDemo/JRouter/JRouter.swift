@@ -9,7 +9,7 @@
 import UIKit
 
 /// 路由日志代理
-var ROUTER_LOGGER_PROXY : JRouterLoggerProxy = JRouterLoggerProxy()
+var ROUTER_LOGGER = JRouterLoggerManager()
 
 /// 路由核心类
 fileprivate class JRouterCore {
@@ -21,18 +21,31 @@ fileprivate class JRouterCore {
     private let pathDic : RouterPagerDictionaryOutput = RouterPagerDictionary()
     
     /// 构建拦截器
-    lazy var interceipt : RouterInterceptor? = getProcessor()
+    var interceipt : RouterInterceptor? = nil
     
     /// 构建路径处理
-    lazy var pathHandle : RouterPathHandle? = getProcessor()
+    var pathHandle : RouterPathHandle? = nil
     
     /// 构建路径注入
-    lazy var injecter : RouterPathInjecter? = getProcessor()
+    var injecter : RouterPathInjecter? = nil
     
-    /// 初始化
+    /// 自动注入初始化
     init() {
+        /// 自动注入处理器
+        interceipt = getProcessor()
+        pathHandle = getProcessor()
+        injecter = getProcessor()
         //路径注入
-        injecter?.inject(pagerDic: pathDic as! RouterPagerDictionaryInput)
+        inject()
+    }
+    
+    private func inject(){
+        if injecter == nil {
+            ROUTER_LOGGER.error("【路径注入失败】 =>>> 没有注入RouterPathInjecter实现类,路径注入失败!")
+            return
+        }
+        //路径注入
+        self.injecter?.inject(pagerDic: pathDic as! RouterPagerDictionaryInput)
     }
     
     /// 获取路径处理器
@@ -41,14 +54,14 @@ fileprivate class JRouterCore {
         Utils.subclasses(T.self).forEach { item in
             let type = (item as! T.Type)
             let processor = type.init()
-            ROUTER_LOGGER_PROXY.debug("【处理器初始化,找到\(T.routerClassName)的实现子类】=>>> \(type.routerClassName)")
+            ROUTER_LOGGER.debug("【处理器初始化,找到\(T.routerClassName)的实现子类】=>>> \(type.routerClassName)")
             processors.append(processor as! JRouterProcessorControl)
         }
         processors.sort { x , y  -> Bool in
             return x.getProcessorLevel() < y.getProcessorLevel()
         }
         if processors.count > 0{
-            ROUTER_LOGGER_PROXY.debug("【最终采用\(T.routerClassName)优先级最高的实现类】=>>> \((processors[0] as! NSObject).routerClassName)")
+            ROUTER_LOGGER.debug("【最终采用\(T.routerClassName)优先级最高的实现类】=>>> \((processors[0] as! NSObject).routerClassName)")
             return processors[0] as? T
         }else{
             return nil
@@ -63,11 +76,11 @@ fileprivate class JRouterCore {
         let key = pathHandle == nil ? data : (pathHandle?.realHandle(path: data))!
         let className = pathDic.getPagerName(key: key)
         if className == nil {
-            ROUTER_LOGGER_PROXY.error("【无法找到该页面！】=> Path = \(data)")
+            ROUTER_LOGGER.error("【无法找到该页面！】=>>> Path = \(data)")
             return nil
         }
         let vc =  (NSClassFromString(className! as String) as! UIViewController.Type).init()
-        ROUTER_LOGGER_PROXY.debug("【获取到\(data)路径所指向实例】->>> \(className!)")
+        ROUTER_LOGGER.debug("【获取到\(data)路径所指向实例】->>> \(className!)")
         return vc
     }
     
@@ -78,12 +91,12 @@ fileprivate class JRouterCore {
         let window = UIApplication.shared.delegate?.window
         if window != nil && window!!.rootViewController is UINavigationController {
             (window!!.rootViewController as! UINavigationController).popToRootViewController(animated: anim)
-            ROUTER_LOGGER_PROXY.debug("【已退出至根页面】")
+            ROUTER_LOGGER.debug("【已退出至根页面】")
         }else{
             if window == nil{
-                ROUTER_LOGGER_PROXY.error("【退出至根页面失败，获取window失败】")
+                ROUTER_LOGGER.error("【退出至根页面失败，获取window失败】")
             }else if !(window!!.rootViewController is UINavigationController){
-                ROUTER_LOGGER_PROXY.error("【退出至根页面失败，rootViewController需继承UINavigationController或者其子类】")
+                ROUTER_LOGGER.error("【退出至根页面失败，rootViewController需继承UINavigationController或者其子类】")
             }
         }
     }
@@ -97,7 +110,7 @@ fileprivate class JRouterCore {
         let key = pathHandle == nil ? data : (pathHandle?.realHandle(path: data))!
         let className = pathDic.getPagerName(key: key)
         if (className == nil){
-            ROUTER_LOGGER_PROXY.error("退出页面失败,页面注册列表中，不包含该页面 path ->>> \(data)")
+            ROUTER_LOGGER.error("退出页面失败,页面注册列表中，不包含该页面 path ->>> \(data)")
             return
         }
         let window = UIApplication.shared.delegate?.window
@@ -107,12 +120,12 @@ fileprivate class JRouterCore {
                     (window!!.rootViewController as! UINavigationController).popToViewController(item, animated: anim)
                 }
             }
-            ROUTER_LOGGER_PROXY.debug("【退出页面成功，成功退至\(className!)页面】")
+            ROUTER_LOGGER.debug("【退出页面成功，成功退至\(className!)页面】")
         }else{
             if window == nil{
-                ROUTER_LOGGER_PROXY.error("【退出页面失败，获取window失败】")
+                ROUTER_LOGGER.error("【退出页面失败，获取window失败】")
             }else if !(window!!.rootViewController is UINavigationController){
-                ROUTER_LOGGER_PROXY.error("【退出页面失败，rootViewController需继承UINavigationController或者其子类】")
+                ROUTER_LOGGER.error("【退出页面失败，rootViewController需继承UINavigationController或者其子类】")
             }
         }
     }
@@ -125,13 +138,13 @@ fileprivate class JRouterCore {
         let window = UIApplication.shared.delegate?.window
         if window != nil && window!!.rootViewController is UINavigationController {
             return  (window!!.rootViewController as! UINavigationController).topViewController?.with({ _ in
-                ROUTER_LOGGER_PROXY.debug("【获取当前顶部视图成功】")
+                ROUTER_LOGGER.debug("【获取当前顶部视图成功】")
             })
         }else{
             if window == nil{
-                ROUTER_LOGGER_PROXY.error("【获取顶部视图失败，获取window失败】")
+                ROUTER_LOGGER.error("【获取顶部视图失败，获取window失败】")
             }else if !(window!!.rootViewController is UINavigationController){
-                ROUTER_LOGGER_PROXY.error("【获取顶部视图失败，rootViewController需继承UINavigationController或者其子类】")
+                ROUTER_LOGGER.error("【获取顶部视图失败，rootViewController需继承UINavigationController或者其子类】")
             }
             return nil
         }
@@ -147,7 +160,7 @@ fileprivate class JRouterCore {
         let key = pathHandle == nil ? name : (pathHandle?.realHandle(path: name))!
         let className = pathDic.getPagerName(key: key)
         if (className == nil){
-            ROUTER_LOGGER_PROXY.error("页面注册列表中，不包含该页面 path ->>> \(name)")
+            ROUTER_LOGGER.error("页面注册列表中，不包含该页面 path ->>> \(name)")
             return false
         }
         let window = UIApplication.shared.delegate?.window
@@ -160,9 +173,9 @@ fileprivate class JRouterCore {
             }
         }else{
             if window == nil{
-                ROUTER_LOGGER_PROXY.error("【判断栈内页面失败，获取window失败】")
+                ROUTER_LOGGER.error("【判断栈内页面失败，获取window失败】")
             }else if !(window!!.rootViewController is UINavigationController){
-                ROUTER_LOGGER_PROXY.error("【判断站内页面失败，rootViewController需继承UINavigationController或者其子类】")
+                ROUTER_LOGGER.error("【判断站内页面失败，rootViewController需继承UINavigationController或者其子类】")
             }
         }
         return has
@@ -175,7 +188,7 @@ fileprivate class JRouterCore {
         let key = pathHandle == nil ? data : (pathHandle?.realHandle(path: data))!
         let className = pathDic.getPagerName(key: key)
         if (className == nil){
-            ROUTER_LOGGER_PROXY.error("移除页面失败，页面注册列表中，不包含该页面 path ->>> \(data)")
+            ROUTER_LOGGER.error("移除页面失败，页面注册列表中，不包含该页面 path ->>> \(data)")
             return
         }
         let window = UIApplication.shared.delegate?.window
@@ -183,15 +196,15 @@ fileprivate class JRouterCore {
             (window!!.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
                 if  item.routerClassName.contains(className!) {
                     (window!!.rootViewController as! UINavigationController).viewControllers.remove(at: index)
-                    ROUTER_LOGGER_PROXY.debug("【移除栈内\(className!)页面成功】")
+                    ROUTER_LOGGER.debug("【移除栈内\(className!)页面成功】")
                     return
                 }
             }
         }else{
             if window == nil{
-                ROUTER_LOGGER_PROXY.error("【页面移除失败，获取window失败】")
+                ROUTER_LOGGER.error("【页面移除失败，获取window失败】")
             }else if !(window!!.rootViewController is UINavigationController){
-                ROUTER_LOGGER_PROXY.error("【页面移除失败，rootViewController需继承UINavigationController或者其子类】")
+                ROUTER_LOGGER.error("【页面移除失败，rootViewController需继承UINavigationController或者其子类】")
             }
         }
     }
@@ -203,7 +216,7 @@ fileprivate class JRouterCore {
         let key = pathHandle == nil ? data : pathHandle!.realHandle(path: data)
         let className = pathDic.getPagerName(key: key)
         if className == nil {
-            ROUTER_LOGGER_PROXY.error("路由失败，页面注册列表中，不包含该页面 path ->>> \(data)")
+            ROUTER_LOGGER.error("路由失败，页面注册列表中，不包含该页面 path ->>> \(data)")
             return
         }
         let vc =  (NSClassFromString(className!) as! UIViewController.Type).init()
@@ -220,12 +233,12 @@ fileprivate class JRouterCore {
         if window != nil && window!!.rootViewController is UINavigationController {
             anim?((window!!.rootViewController as! UINavigationController))
             (window!!.rootViewController as! UINavigationController).pushViewController(vc, animated: true)
-            ROUTER_LOGGER_PROXY.debug("【路由成功,路由至\(className!)页面成功】")
+            ROUTER_LOGGER.debug("【路由成功,路由至\(className!)页面成功】")
         }else{
             if window == nil{
-                ROUTER_LOGGER_PROXY.error("【路由失败，获取window失败】")
+                ROUTER_LOGGER.error("【路由失败，获取window失败】")
             }else if !(window!!.rootViewController is UINavigationController){
-                ROUTER_LOGGER_PROXY.error("【路由失败，rootViewController需继承UINavigationController或者其子类】")
+                ROUTER_LOGGER.error("【路由失败，rootViewController需继承UINavigationController或者其子类】")
             }
         }
     }
@@ -292,7 +305,7 @@ public class JRouter {
     
     /// 开启路由日志打印
     public static func enableDebuger(){
-        ROUTER_LOGGER_PROXY.enableLogger()
+        ROUTER_LOGGER.enableLogger()
     }
     
 }

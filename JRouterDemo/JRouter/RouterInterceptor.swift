@@ -24,7 +24,7 @@ open class RouterInterceptor : NSObject , JRouterProcessorControl{
     func realIntercept(path :String , intent :RouterPagerAgreement) -> Bool {
         let isIntercept =  intercept(path:path , intent: intent)
         if (isIntercept){
-            ROUTER_LOGGER_PROXY.debug("路由\(path)页面时，被拦截")
+            ROUTER_LOGGER.debug("路由\(path)页面时，被拦截")
         }
         return isIntercept
     }

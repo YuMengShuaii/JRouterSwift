@@ -17,9 +17,6 @@ public class Log {
     /// 默认TAG
     fileprivate var defTag : String = "【Logger::Tag】"
     
-    /// 默认打印处理器
-    fileprivate var printerProcessor : LoggerProcessor = PrinterProcessor()
-    
     /// Log可以添加多个自定义日志处理器
     fileprivate var processorList :[LoggerProcessor] = []
     
@@ -53,7 +50,6 @@ public class Log {
             return
         }
         let location = LogLocation.init(fileName: file, method: function, line: line)
-        printerProcessor.processor(logtype: .debug,location: location, tag: tag == nil ? defTag : tag, conetnt: conetnt)
         processor(logtype: .debug , location: location , tag: tag == nil ? defTag : tag, conetnt: conetnt)
     }
     
@@ -70,7 +66,6 @@ public class Log {
             return
         }
         let location = LogLocation.init(fileName: file, method: function, line: line)
-        printerProcessor.processor(logtype: .info,location: location ,tag: tag == nil ? defTag : tag, conetnt: conetnt)
         processor(logtype: .debug , location: location , tag: tag == nil ? defTag : tag, conetnt: conetnt)
     }
     
@@ -87,7 +82,6 @@ public class Log {
             return
         }
         let location = LogLocation.init(fileName: file, method: function, line: line)
-        printerProcessor.processor(logtype: .error,location: location, tag: tag == nil ? defTag : tag, conetnt: conetnt)
         processor(logtype: .debug , location: location , tag: tag == nil ? defTag : tag, conetnt: conetnt)
     }
     
@@ -143,12 +137,11 @@ public class LogBuilder{
         return self
     }
     
-    /// 设置自定义日志打印处理器
+    /// 使用内置日志处理器
     ///
-    /// - Parameter printer: 自定义日志处理器
     /// - Returns: 日志构造器
-    public func setCustomPrinterProcessor(printer :LoggerProcessor)  -> LogBuilder{
-        loger.printerProcessor = printer
+    public func defaultLogProcessor() -> LogBuilder{
+        loger.processorList.append(PrinterProcessor())
         return self
     }
     

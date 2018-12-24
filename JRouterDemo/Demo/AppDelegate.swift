@@ -9,7 +9,7 @@
 import UIKit
 
 /// 日志打印器
-public let LOGGER = Log.builder().setTag(tag: "JROUTER::DEMO").build()
+public let LOGGER = Log.builder().defaultLogProcessor().setTag(tag: "JROUTER::DEMO").build()
 
 
 @UIApplicationMain

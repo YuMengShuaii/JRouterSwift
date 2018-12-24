@@ -21,13 +21,13 @@ open class RouterPathInjecter :NSObject , JRouterProcessorControl{
     ///
     /// - Returns: 模块注入路径综合
     func realInject(pagerDic : RouterPagerDictionaryInput) {
-        ROUTER_LOGGER_PROXY.info("===========================================")
-        ROUTER_LOGGER_PROXY.info("            JROUTER开始路径注入")
-        ROUTER_LOGGER_PROXY.info("===========================================")
+        ROUTER_LOGGER.info("===========================================")
+        ROUTER_LOGGER.info("            JROUTER开始路径注入")
+        ROUTER_LOGGER.info("===========================================")
         inject(pagerDic: pagerDic)
-        ROUTER_LOGGER_PROXY.info("================================================================")
-        ROUTER_LOGGER_PROXY.info("        JROUTER路径注入结束，共注入\(pagerDic.pageCount)个页面")
-        ROUTER_LOGGER_PROXY.info("================================================================")
+        ROUTER_LOGGER.info("================================================================")
+        ROUTER_LOGGER.info("        JROUTER路径注入结束，共注入\(pagerDic.pageCount)个页面")
+        ROUTER_LOGGER.info("================================================================")
     }
     
     /// 注入 外部暴露

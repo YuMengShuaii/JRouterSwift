@@ -6,8 +6,10 @@
 //  Copyright © 2018 Parrot. All rights reserved.
 //
 
+import Foundation
+
 /// 基础数据接口
-public protocol RouterPagerAgreement {
+public protocol RouterPagerAgreement{
     
     /// 设置内容
     ///
@@ -23,4 +25,13 @@ public protocol RouterPagerAgreement {
     func getArgs<T>(key : String , defaultValue : T) ->T
     
 
+}
+
+// MARK: - 默认模块实现 让数据传递方法变为可选实现
+extension RouterPagerAgreement {
+    
+    func setArgs(key :String , value : Any){}
+    
+    func getArgs<T>(key : String , defaultValue : T) ->T{ return -1 as! T }
+    
 }

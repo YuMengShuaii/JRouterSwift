@@ -9,7 +9,7 @@
 import Foundation
 
 /// 路由日志代理
-class JRouterLoggerProxy {
+class JRouterLoggerManager {
     
     /// 日志标记
     private var loggerEnable = false

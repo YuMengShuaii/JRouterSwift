@@ -28,7 +28,7 @@
 		67EA34B321CB81080071C9A2 /* JRouterExtend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EA34B221CB81080071C9A2 /* JRouterExtend.swift */; };
 		67EA34B521CB87970071C9A2 /* ViewExtend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EA34B421CB87970071C9A2 /* ViewExtend.swift */; };
 		67EA34B821CB8A0B0071C9A2 /* RouterPagerDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EA34B721CB8A0B0071C9A2 /* RouterPagerDictionary.swift */; };
-		67EA34BA21CBA1C40071C9A2 /* JRouterLoggerProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EA34B921CBA1C40071C9A2 /* JRouterLoggerProxy.swift */; };
+		67EA34BA21CBA1C40071C9A2 /* JRouterLoggerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EA34B921CBA1C40071C9A2 /* JRouterLoggerManager.swift */; };
 		67EA34BC21CCEE7F0071C9A2 /* JRouterPathType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EA34BB21CCEE7F0071C9A2 /* JRouterPathType.swift */; };
 		67EA34BE21CCF0EB0071C9A2 /* JRouterProcessorControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EA34BD21CCF0EB0071C9A2 /* JRouterProcessorControl.swift */; };
 /* End PBXBuildFile section */
@@ -78,7 +78,7 @@
 		67EA34B221CB81080071C9A2 /* JRouterExtend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRouterExtend.swift; sourceTree = "<group>"; };
 		67EA34B421CB87970071C9A2 /* ViewExtend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtend.swift; sourceTree = "<group>"; };
 		67EA34B721CB8A0B0071C9A2 /* RouterPagerDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterPagerDictionary.swift; sourceTree = "<group>"; };
-		67EA34B921CBA1C40071C9A2 /* JRouterLoggerProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRouterLoggerProxy.swift; sourceTree = "<group>"; };
+		67EA34B921CBA1C40071C9A2 /* JRouterLoggerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRouterLoggerManager.swift; sourceTree = "<group>"; };
 		67EA34BB21CCEE7F0071C9A2 /* JRouterPathType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JRouterPathType.swift; sourceTree = "<group>"; };
 		67EA34BD21CCF0EB0071C9A2 /* JRouterProcessorControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JRouterProcessorControl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +108,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		67A42D6F21D09535004D77AF /* TransitionAnim */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TransitionAnim;
+			sourceTree = "<group>";
+		};
 		67EA345C21CB3CC40071C9A2 = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +138,7 @@
 		67EA346721CB3CC40071C9A2 /* JRouterDemo */ = {
 			isa = PBXGroup;
 			children = (
+				67A42D6F21D09535004D77AF /* TransitionAnim */,
 				67EA34B621CB88990071C9A2 /* Logger */,
 				67EA349921CB3D380071C9A2 /* Other */,
 				67EA349721CB3CEB0071C9A2 /* Demo */,
@@ -168,7 +176,7 @@
 				67EA34A621CB7C280071C9A2 /* RouterPathHandle.swift */,
 				67EA34A821CB7C320071C9A2 /* RouterPathInjecter.swift */,
 				67EA34B721CB8A0B0071C9A2 /* RouterPagerDictionary.swift */,
-				67EA34B921CBA1C40071C9A2 /* JRouterLoggerProxy.swift */,
+				67EA34B921CBA1C40071C9A2 /* JRouterLoggerManager.swift */,
 				67EA34BD21CCF0EB0071C9A2 /* JRouterProcessorControl.swift */,
 			);
 			path = JRouter;
@@ -351,7 +359,7 @@
 				67EA34AF21CB804E0071C9A2 /* TestPathHandle.swift in Sources */,
 				67EA34A921CB7C320071C9A2 /* RouterPathInjecter.swift in Sources */,
 				67EA34AB21CB80250071C9A2 /* TestRouterInterceptor.swift in Sources */,
-				67EA34BA21CBA1C40071C9A2 /* JRouterLoggerProxy.swift in Sources */,
+				67EA34BA21CBA1C40071C9A2 /* JRouterLoggerManager.swift in Sources */,
 				67EA34BC21CCEE7F0071C9A2 /* JRouterPathType.swift in Sources */,
 				67EA34A121CB67FA0071C9A2 /* Utils.swift in Sources */,
 				67EA34AD21CB80360071C9A2 /* TestPathInjecter.swift in Sources */,
