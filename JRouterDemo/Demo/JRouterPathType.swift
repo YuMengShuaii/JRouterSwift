@@ -14,4 +14,6 @@ public enum JRouterPathType : String  {
     
     case ROOT = "/root/main"
     
+    case TEST = "/root/TEST"
+
 }

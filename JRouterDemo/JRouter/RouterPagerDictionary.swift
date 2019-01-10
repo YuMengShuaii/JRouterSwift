@@ -12,9 +12,22 @@ import UIKit
 /// 路由路径字典封装类
 class RouterPagerDictionary : RouterPagerDictionaryInput ,RouterPagerDictionaryOutput  {
 
+    /// 初始化
+    ///
+    /// - Parameter notFoundHandle: notfoundc处理
+    init(notFoundHandle : PagerNotFoundHandle) {
+        self.notFoundHandle = notFoundHandle
+    }
+    
+    /// 查找失败处理
+    private weak var notFoundHandle : PagerNotFoundHandle? = nil
+    
     /// 存储实体
     private let dic = NSMutableDictionary()
     
+    /// 路由页面字典缓存索引
+    private let ROUTER_CACHE_KEY = "router_dic_index"
+
     /// 页面总数
     public var pageCount: Int {
         get {
@@ -39,14 +52,36 @@ class RouterPagerDictionary : RouterPagerDictionaryInput ,RouterPagerDictionaryO
     /// - Parameter key: 索引
     /// - Returns: 页面
     func getPagerName(key: String) -> String? {
-        let result = dic.value(forKey: key)
+        var result = dic.value(forKey: key)
+        if result == nil {
+            notFoundHandle?.notFoundHandle()
+            result = dic.value(forKey: key)
+        }
         if result == nil {
             return nil
-        }else{
-            return result as? String
+        }
+        return result as? String
+    }
+    
+    /// 存储缓存
+    func cacheDisk() {
+        if dic.count > 0 {
+            UserDefaults.standard.set(dic, forKey: ROUTER_CACHE_KEY)
         }
     }
     
+    /// 读取缓存
+    func formCache() {
+        let cache = UserDefaults.standard.dictionary(forKey: ROUTER_CACHE_KEY)
+        if cache != nil{
+            dic.setDictionary(cache!)
+        }
+    }
+    
+    /// 清空
+    func clear() {
+        dic.removeAllObjects()
+    }
 }
 
 /// 路由字典输入协议
@@ -72,7 +107,24 @@ protocol RouterPagerDictionaryOutput : RouterPagerInfo{
     
 }
 
+/// pager查找失败处理
+protocol PagerNotFoundHandle :class {
+    
+    /// 处理接口
+    func notFoundHandle()
+    
+}
+
 public protocol RouterPagerInfo {
     /// 页面总数
     var pageCount :Int { get }
+    
+    /// 存储缓存
+    func cacheDisk()
+    
+    /// 读取缓存
+    func formCache()
+
+    /// 清空
+    func clear()
 }

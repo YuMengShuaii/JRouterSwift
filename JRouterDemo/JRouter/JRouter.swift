@@ -12,13 +12,13 @@ import UIKit
 var ROUTER_LOGGER = JRouterLoggerManager()
 
 /// 路由核心类
-fileprivate class JRouterCore {
+fileprivate class JRouterCore : PagerNotFoundHandle {
     
     ///单例
     fileprivate static let shared = JRouterCore()
     
     /// 路径DIC
-    private let pathDic : RouterPagerDictionaryOutput = RouterPagerDictionary()
+    private lazy var pathDic : RouterPagerDictionaryOutput = RouterPagerDictionary(notFoundHandle: self)
     
     /// 构建拦截器
     var interceipt : RouterInterceptor? = nil
@@ -44,8 +44,27 @@ fileprivate class JRouterCore {
             ROUTER_LOGGER.error("【路径注入失败】 =>>> 没有注入RouterPathInjecter实现类,路径注入失败!")
             return
         }
-        //路径注入
+        
+        pathDic.formCache()
+        if pathDic.pageCount == 0{
+            reInject()
+        }else{
+            ROUTER_LOGGER.debug("从缓存拉取页面信息")
+        }
+    
+    }
+    
+    /// 重新拉取页面信息
+    private func reInject(){
+        ROUTER_LOGGER.debug("重新拉取页面信息")
         self.injecter?.inject(pagerDic: pathDic as! RouterPagerDictionaryInput)
+        pathDic.cacheDisk()
+    }
+    
+    /// 查找页面失败处理
+    func notFoundHandle() {
+        pathDic.clear()
+        reInject()
     }
     
     /// 获取路径处理器

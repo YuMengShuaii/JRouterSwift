@@ -50,7 +50,7 @@ class JRouterLoggerManager {
         }
         let fileName = (file as NSString).lastPathComponent.split(separator: ".")[0]
         let location =  "\(fileName).\(function):\(line)"
-        processor(logtype: 2, conetnt: " \(location) \(tag) ->>> \(conetnt)")
+        processor(logtype: 3, conetnt: " \(location) \(tag) ->>> \(conetnt)")
     }
     
     /// erorr打印方法
@@ -64,7 +64,7 @@ class JRouterLoggerManager {
     public func error(tag : String = "JRouter::Debuger", _ conetnt : Any , file:String = #file, function:String = #function , line:Int = #line){
         let fileName = (file as NSString).lastPathComponent.split(separator: ".")[0]
         let location =  "\(fileName).\(function):\(line)"
-        processor(logtype: 2, conetnt: " \(location) \(tag) ->>> \(conetnt)")
+        processor(logtype: 1, conetnt: " \(location) \(tag) ->>> \(conetnt)")
     }
     
     

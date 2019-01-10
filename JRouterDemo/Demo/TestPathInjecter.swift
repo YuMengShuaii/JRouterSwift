@@ -12,7 +12,8 @@ import Foundation
 class TestPathInjecter : RouterPathInjecter {
     
     override func pathDictionaryProvider() -> [String : String] {
-        return ["RootViewController":JRouterPathType.ROOT.rawValue]
+        return ["RootViewController":JRouterPathType.ROOT.rawValue,
+                "TestViewController":JRouterPathType.TEST.rawValue]
     }
     
 }
