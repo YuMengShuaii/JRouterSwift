@@ -53,7 +53,7 @@ extension NSObject {
 
 // MARK: - 扩展Array
 extension Array{
-    public func forEachEnumerated(_ body: @escaping (_ offset: Int, _ element: Element) -> Void) {
+    public func easyFor(_ body: @escaping (_ offset: Int, _ element: Element) -> Void) {
         enumerated().forEach(body)
     }
 }

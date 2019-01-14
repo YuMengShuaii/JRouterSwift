@@ -184,7 +184,7 @@ fileprivate class JRouterCore : PagerNotFoundHandle {
         }
         let window = UIApplication.shared.delegate?.window
         if window != nil && window!!.rootViewController is UINavigationController {
-            (window!!.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
+            (window!!.rootViewController as! UINavigationController).viewControllers.easyFor { (index, item) in
                 if  item.routerClassName.contains(className!) {
                     has = true
                     return
@@ -212,7 +212,7 @@ fileprivate class JRouterCore : PagerNotFoundHandle {
         }
         let window = UIApplication.shared.delegate?.window
         if window != nil && window!!.rootViewController is UINavigationController {
-            (window!!.rootViewController as! UINavigationController).viewControllers.forEachEnumerated { (index, item) in
+            (window!!.rootViewController as! UINavigationController).viewControllers.easyFor { (index, item) in
                 if  item.routerClassName.contains(className!) {
                     (window!!.rootViewController as! UINavigationController).viewControllers.remove(at: index)
                     ROUTER_LOGGER.debug("【移除栈内\(className!)页面成功】")
