@@ -156,7 +156,7 @@ fileprivate class JRouterCore : PagerNotFoundHandle {
     fileprivate func getCurrentPage() ->UIViewController?{
         let window = UIApplication.shared.delegate?.window
         if window != nil && window!!.rootViewController is UINavigationController {
-            return  (window!!.rootViewController as! UINavigationController).topViewController?.with({ _ in
+            return  (window!!.rootViewController as! UINavigationController).topViewController?.done({ _ in
                 ROUTER_LOGGER.debug("【获取当前顶部视图成功】")
             })
         }else{

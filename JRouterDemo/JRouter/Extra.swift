@@ -26,7 +26,7 @@ extension CGRect: AnyOpt {}
 extension CGSize: AnyOpt {}
 extension CGVector: AnyOpt {}
 extension AnyOpt where Self :Any {
-    public func with(_ block: (inout Self) throws -> Void) rethrows -> Self {
+    public func done(_ block: (inout Self) throws -> Void) rethrows -> Self {
         var copy = self
         try block(&copy)
         return copy

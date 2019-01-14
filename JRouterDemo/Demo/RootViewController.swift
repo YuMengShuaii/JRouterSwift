@@ -30,7 +30,7 @@ class RootViewController: UIViewController , RouterPagerAgreement{
 //    }
     
     
-    let textView = UILabel().with {
+    let textView = UILabel().done {
         $0.font = UIFont.systemFont(ofSize: 15)
         $0.textColor = .black
         $0.textAlignment = .center
@@ -81,7 +81,7 @@ class TestViewController: UIViewController , RouterPagerAgreement{
     //    }
     
     
-    let textView = UILabel().with {
+    let textView = UILabel().done {
         $0.font = UIFont.systemFont(ofSize: 15)
         $0.textColor = .black
         $0.textAlignment = .center
