@@ -29,6 +29,9 @@ fileprivate class JRouterCore : PagerNotFoundHandle {
     /// 构建路径注入
     var injecter : RouterPathInjecter? = nil
     
+    /// 缓存开关
+    fileprivate var cacheEnable :Bool = false
+    
     /// 自动注入初始化
     init() {
         /// 自动注入处理器
@@ -45,7 +48,10 @@ fileprivate class JRouterCore : PagerNotFoundHandle {
             return
         }
         
-        pathDic.formCache()
+        if cacheEnable{
+            pathDic.formCache()
+        }
+        
         if pathDic.pageCount == 0{
             reInject()
         }else{
@@ -325,6 +331,11 @@ public class JRouter {
     /// 开启路由日志打印
     public static func enableDebuger(){
         ROUTER_LOGGER.enableLogger()
+    }
+    
+    /// 开启缓存策略
+    public static func enableCache(){
+        JRouterCore.shared.cacheEnable = true
     }
     
 }
