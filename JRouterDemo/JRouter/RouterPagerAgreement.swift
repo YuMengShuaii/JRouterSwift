@@ -28,7 +28,7 @@ public protocol RouterPagerAgreement{
 }
 
 // MARK: - 默认模块实现 让数据传递方法变为可选实现
-extension RouterPagerAgreement {
+public extension RouterPagerAgreement {
     
     func setArgs(key :String , value : Any){}
     
