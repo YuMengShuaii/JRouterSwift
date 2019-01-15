@@ -54,7 +54,7 @@ open class RouterPathInjecter :NSObject , JRouterProcessorControl{
     private func initOfBaseClass(baseClass : AnyClass , pagerDic : RouterPagerDictionaryInput){
         Utils.subclasses(baseClass).forEach {[unowned self] item in
             let type = (item as! UIViewController.Type)
-            if !self.skip(className: type.routerClassName) && item is RouterPagerAgreement.Type && !skip(className: type.routerClassName){
+            if !self.skip(className: type.routerClassName) && item is RouterPagerAgreement.Type && !skipBaseClass(className: type.routerClassName){
                 pagerDic.registerRouterPager(controller: type , key: pathDictionaryProvider()[String(type.routerClassName.split(separator: ".")[1])]!)
             }
         }
@@ -79,7 +79,12 @@ open class RouterPathInjecter :NSObject , JRouterProcessorControl{
     /// - Parameter className: 页面名称
     /// - Returns: 是否跳过
     open func skip(className : String) -> Bool{
-        return skipListProvider().contains(className)
+        for baseClass in skipListProvider(){
+            if className.contains(baseClass) {
+                return true
+            }
+        }
+        return false
     }
     
     /// 跳过页面的内容提供者

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import UIKit
 /// 工具类
 class Utils{
     /// 获取指定类所有子类
@@ -15,10 +15,22 @@ class Utils{
     /// - Parameter baseclass: 指定类
     /// - Returns: 子类集合
     static func subclasses(_ baseclass: AnyClass!) -> [AnyClass] {
+        
         var result = [AnyClass]()
         
         guard let baseclass = baseclass else {
             return result
+        }
+        
+        func isImpl(someclass: AnyClass) ->Bool{
+            let superClass : AnyClass? = class_getSuperclass(someclass)
+            if superClass ==  nil{
+                return false
+            }
+            if (superClass == baseclass) {
+                return true
+            }
+            return isImpl(someclass: superClass!)
         }
         
         let count: Int32 = objc_getClassList(nil, 0)
@@ -39,7 +51,7 @@ class Utils{
         
         for i in 0..<Int(objc_getClassList(buffer, count)) {
             let someclass: AnyClass = classes[i]
-            if (class_getSuperclass(someclass) == baseclass) {
+            if isImpl(someclass: someclass) {
                 result.append(someclass)
             }
         }
