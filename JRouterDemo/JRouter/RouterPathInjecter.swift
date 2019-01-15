@@ -17,6 +17,13 @@ open class RouterPathInjecter :NSObject , JRouterProcessorControl{
         
     }
     
+    /// 基础Class提供者
+    ///
+    /// - Returns: 基础Class
+    open func baseClassProvider() ->[AnyClass]{
+        return [UIViewController.self]
+    }
+    
     /// 注入 模块内调用
     ///
     /// - Returns: 模块注入路径综合
@@ -34,12 +41,37 @@ open class RouterPathInjecter :NSObject , JRouterProcessorControl{
     ///
     /// - Returns: 模块注入路径综合
     open func inject(pagerDic : RouterPagerDictionaryInput) {
-        Utils.subclasses(UIViewController.self).forEach {[unowned self] item in
+        baseClassProvider().forEach {[unowned self] baseClass in
+            self.initOfBaseClass(baseClass: baseClass, pagerDic: pagerDic)
+        }
+    }
+    
+    /// 初始化以一个baseClass为基准
+    ///
+    /// - Parameters:
+    ///   - baseClass: 基类
+    ///   - pagerDic: 路径字典
+    private func initOfBaseClass(baseClass : AnyClass , pagerDic : RouterPagerDictionaryInput){
+        Utils.subclasses(baseClass).forEach {[unowned self] item in
             let type = (item as! UIViewController.Type)
-            if !self.skip(className: type.routerClassName) && item is RouterPagerAgreement.Type{
+            if !self.skip(className: type.routerClassName) && item is RouterPagerAgreement.Type && !skip(className: type.routerClassName){
                 pagerDic.registerRouterPager(controller: type , key: pathDictionaryProvider()[String(type.routerClassName.split(separator: ".")[1])]!)
             }
         }
+    }
+    
+    /// 跳过基础Class不予注入
+    ///
+    /// - Parameter className: 类名
+    /// - Returns: 是否跳过
+    private func skipBaseClass(className :String) ->Bool{
+        for baseClass in baseClassProvider(){
+            let name = (baseClass as! UIViewController.Type).routerClassName
+            if name.contains(className) {
+                return true
+            }
+        }
+        return false
     }
     
     /// 决策那些页面需要跳过注入
